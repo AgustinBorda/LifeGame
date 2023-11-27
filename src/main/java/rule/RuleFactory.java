@@ -6,16 +6,14 @@ public class RuleFactory {
     }
 
     public static Rule createBirthRule(int neighbors) {
-        if(neighbors == 3)
-            return new B3Rule();
-        throw new IllegalArgumentException("No such rule");
+        if(neighbors < 0 || neighbors > 8)
+            throw new IllegalArgumentException("Invalid neighbors number");
+        return new BirthRule(neighbors);
     }
 
     public static Rule createSurviveRule(int neighbors) {
-        if(neighbors == 2)
-            return new S2Rule();
-        if(neighbors == 3)
-            return new S3Rule();
-        throw new IllegalArgumentException("No such rule");
+        if(neighbors < 0 || neighbors > 8)
+            throw new IllegalArgumentException("Invalid neighbors number");
+        return new SurviveRule(neighbors);
     }
 }

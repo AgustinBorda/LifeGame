@@ -5,6 +5,8 @@ import cell.DeadState;
 
 public class DeathRuleBehavior implements RuleBehavior {
 
+    public DeathRuleBehavior() {}
+
     @Override
     public final boolean canApply(Cell c) {
         return true;

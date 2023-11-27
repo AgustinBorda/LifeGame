@@ -10,4 +10,9 @@ public class AliveState implements CellState {
     public String toString() {
         return "A";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof AliveState;
+    }
 }

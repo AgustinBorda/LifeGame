@@ -11,4 +11,9 @@ public class DeadState implements CellState {
     public String toString() {
         return "D";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof DeadState;
+    }
 }
