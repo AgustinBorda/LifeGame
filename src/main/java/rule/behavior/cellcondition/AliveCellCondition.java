@@ -9,4 +9,9 @@ public class AliveCellCondition implements CellCondition {
     public boolean cellCondition(Cell c) {
         return c.isAlive();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof AliveCellCondition;
+    }
 }

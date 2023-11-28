@@ -74,4 +74,23 @@ public abstract class Board extends Observable {
         }
         return res.toString();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Board) {
+            Board b = (Board) obj;
+            if(b.getRows() != getRows())
+                return false;
+            if(b.getColumns() != getColumns())
+                return false;
+            BoardIterator thisIt = iterator();
+            BoardIterator objIt = b.iterator();
+            while(thisIt.hasNext()) {
+                if(!thisIt.next().equals(objIt.next()))
+                    return false;
+            }
+            return true;
+        }
+        return false;
+    }
 }

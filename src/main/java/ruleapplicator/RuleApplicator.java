@@ -30,8 +30,7 @@ public class RuleApplicator {
                 if(r.canApply(c))
                     r.apply(c);
             }
-            b.transition();
         }
-
+        b.transition();
     }
 }

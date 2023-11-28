@@ -4,10 +4,10 @@ import board.Board;
 
 public class Cell {
 
-    Board board;
-    CellState currentState;
+    private Board board;
+    private CellState currentState;
 
-    CellState nextState;
+    private CellState nextState;
 
     private final int row;
 
@@ -48,5 +48,14 @@ public class Cell {
     @Override
     public String toString() {
         return currentState.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Cell) {
+            Cell c = (Cell) obj;
+            return isAlive() == c.isAlive();
+        }
+        return false;
     }
 }

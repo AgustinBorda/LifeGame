@@ -11,6 +11,7 @@ public class ConsoleView implements Observer {
     public ConsoleView(Board board) {
         b = board;
         b.addObserver(this);
+        display();
     }
 
     @Override
