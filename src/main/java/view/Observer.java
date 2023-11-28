@@ -3,5 +3,5 @@ package view;
 public interface Observer {
     void update();
 
-    void display();
+    String display();
 }

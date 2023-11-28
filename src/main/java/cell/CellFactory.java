@@ -26,10 +26,10 @@ public class CellFactory {
     }
 
     public Cell makeAliveCell() {
-        return makeCell(new AliveState());
+        return makeCell(AliveState.getInstance());
     }
 
     public Cell makeDeadCell() {
-        return makeCell(new DeadState());
+        return makeCell(DeadState.getInstance());
     }
 }

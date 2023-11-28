@@ -6,6 +6,8 @@ public class TimeDelayerFactory {
             return new SecondDelayer(time);
         if(mode.equals("m"))
             return new MinuteDelayer(time);
+        if(mode.equals("ms"))
+            return new MilliSecondDelayer(time);
         throw new IllegalArgumentException("Non-existent time delayer");
     }
 

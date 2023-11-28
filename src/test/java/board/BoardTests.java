@@ -48,7 +48,7 @@ public class BoardTests {
         b = new FiniteBoard(originalState);
         BoardIterator iterator = b.iterator();
         while(iterator.hasNext()) {
-            iterator.next().setNextState(new AliveState());
+            iterator.next().setNextState(AliveState.getInstance());
         }
         b.transition();
         iterator = b.iterator();
@@ -92,6 +92,39 @@ public class BoardTests {
     @ParameterizedTest
     @MethodSource("CellLocationAndNeighborsProvider")
     public void FiniteBoardNeighborsTest(int row, int column, int neighbors) {
+        Cell c = b.getCell(row,column);
+        assertEquals(neighbors, c.numberOfAliveNeighbors());
+    }
+
+    public static Stream<Arguments> CellLocationAndNeighborsForToroidalBoardProvider() {
+        return Stream.of(
+                Arguments.of(0,0,2),
+                Arguments.of(0,1,2),
+                Arguments.of(0,2,3),
+                Arguments.of(0,3,2),
+                Arguments.of(1,0,2),
+                Arguments.of(1,1,2),
+                Arguments.of(1,2,1),
+                Arguments.of(1,3,3),
+                Arguments.of(2,0,4),
+                Arguments.of(2,1,5),
+                Arguments.of(2,2,5),
+                Arguments.of(2,3,5),
+                Arguments.of(3,0,6),
+                Arguments.of(3,1,4),
+                Arguments.of(3,2,5),
+                Arguments.of(3,3,5),
+                Arguments.of(4,0,5),
+                Arguments.of(4,1,3),
+                Arguments.of(4,2,5),
+                Arguments.of(4,3,3)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("CellLocationAndNeighborsForToroidalBoardProvider")
+    public void ToroidalBoardNeighborsTest(int row, int column, int neighbors) {
+        Board b = new ToroidalBoard(originalState);
         Cell c = b.getCell(row,column);
         assertEquals(neighbors, c.numberOfAliveNeighbors());
     }

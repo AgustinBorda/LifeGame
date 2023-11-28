@@ -14,6 +14,6 @@ public class DeathRuleBehavior implements RuleBehavior {
 
     @Override
     public final void apply(Cell c) {
-        c.setNextState(new DeadState());
+        c.setNextState(DeadState.getInstance());
     }
 }

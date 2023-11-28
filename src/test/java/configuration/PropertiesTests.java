@@ -66,4 +66,11 @@ public class PropertiesTests {
         TimeDelayer delayer = g.getDelayer();
         assertEquals(TimeDelayerFactory.makeTimeDelayer("m", 4), delayer);
     }
+
+    @Test
+    public void getMilliSecondDelayerTest() {
+        g.setProperty("TIME_BETWEEN_TICKS", "500ms");
+        TimeDelayer delayer = g.getDelayer();
+        assertEquals(TimeDelayerFactory.makeTimeDelayer("ms", 500), delayer);
+    }
 }

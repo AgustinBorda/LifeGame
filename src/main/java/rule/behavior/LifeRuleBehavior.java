@@ -23,7 +23,7 @@ public class LifeRuleBehavior implements RuleBehavior {
 
     @Override
     public void apply(Cell c) {
-        c.setNextState(new AliveState());
+        c.setNextState(AliveState.getInstance());
     }
 
     @Override

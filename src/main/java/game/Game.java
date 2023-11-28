@@ -5,15 +5,19 @@ import ruleapplicator.RuleApplicator;
 import timedelayer.TimeDelayer;
 
 public class Game {
-    Board b;
+    private Board b;
 
-    RuleApplicator applicator;
-    TimeDelayer delayer;
+    private RuleApplicator applicator;
+    private TimeDelayer delayer;
 
     public Game(Board b, RuleApplicator a, TimeDelayer d) {
         this.b = b;
         applicator = a;
         delayer = d;
+    }
+
+    public Board getBoard() {
+        return b;
     }
 
     public void tick() {

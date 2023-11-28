@@ -7,6 +7,9 @@ import rule.RuleFactory;
 import timedelayer.TimeDelayer;
 import timedelayer.TimeDelayerFactory;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -25,6 +28,7 @@ public class GameProperties extends Properties {
     private String rules = "";
     private static final GameProperties instance = new GameProperties();
 
+    private String steps = "";
     boolean loaded = false;
     public void parseParams(String[] params) {
         for(String param : params) {
@@ -38,27 +42,37 @@ public class GameProperties extends Properties {
                 boardType = param.replace("-board=","");
             if(param.startsWith("-rules="))
                 rules = param.replace("-rules=","");
+            if(param.startsWith("-steps="))
+                steps = param.replace("-steps=","");
         }
     }
 
     public void loadParams() {
-        GameProperties p = GameProperties.getInstance();
-        p.load(configPath);
+        load(configPath);
+        setProperty("INITIAL_STATE",getProperty("INITIAL_STATE").replaceAll("\\|", ""));
         if(!initialState.isEmpty())
-            p.setProperty("INITIAL_STATE", initialState);
+            setProperty("INITIAL_STATE", initialState);
         if(!timeBetweenTicks.isEmpty())
-            p.setProperty("TIME_BETWEEN_TICKS", initialState);
+            setProperty("TIME_BETWEEN_TICKS", timeBetweenTicks);
         if(!boardType.isEmpty())
-            p.setProperty("BOARD_TYPE", initialState);
+            setProperty("BOARD_TYPE", boardType);
         if(!rules.isEmpty())
-            p.setProperty("RULES", initialState);
+            setProperty("RULES", rules);
+        if(!steps.isEmpty())
+            setProperty("SIMULATION_STEPS", steps);
     }
 
     public void load(String path) {
         if(loaded)
             return;
         loaded = true;
-        instance.load(path);
+        try {
+            instance.load(new FileInputStream(path));
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
     }
 
     public static GameProperties getInstance() {
@@ -89,8 +103,18 @@ public class GameProperties extends Properties {
 
     public TimeDelayer getDelayer() {
         String coolDown = getProperty("TIME_BETWEEN_TICKS");
-        int number = Integer.parseInt(coolDown.substring(0,coolDown.length()-1));
-        String mode = String.valueOf(coolDown.charAt(coolDown.length()-1));
+        int i = coolDown.length();
+        do
+            i--;
+        while(!Character.isDigit(coolDown.charAt(i)));
+        i++;
+        i = coolDown.length() - i;
+        int number = Integer.parseInt(coolDown.substring(0,coolDown.length()-i));
+        String mode = coolDown.substring(coolDown.length()-i);
         return TimeDelayerFactory.makeTimeDelayer(mode, number);
+    }
+
+    public int getSteps() {
+        return Integer.parseInt(getProperty("SIMULATION_STEPS"));
     }
 }

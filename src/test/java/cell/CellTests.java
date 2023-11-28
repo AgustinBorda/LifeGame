@@ -37,13 +37,13 @@ public class CellTests {
         Cell c = factory.makeAliveCell();
         assertTrue(c.isAlive());
         c.transition();
-        c.setNextState(new DeadState());
+        c.setNextState(DeadState.getInstance());
         c.transition();
         assertFalse(c.isAlive());
-        c.setNextState(new DeadState());
+        c.setNextState(DeadState.getInstance());
         c.transition();
         assertFalse(c.isAlive());
-        c.setNextState(new AliveState());
+        c.setNextState(AliveState.getInstance());
         c.transition();
         assertTrue(c.isAlive());
     }

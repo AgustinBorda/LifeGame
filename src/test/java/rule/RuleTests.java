@@ -91,21 +91,21 @@ public class RuleTests {
    public void deathRuleSetsTheNextCellStateInDead() {
       Rule r = RuleFactory.createDeathRule();
       r.apply(c);
-      verify(c).setNextState(new DeadState());
+      verify(c).setNextState(DeadState.getInstance());
    }
 
    @Test
    public void surviveRuleSetsTheNextCellStateInAlive() {
       Rule r = RuleFactory.createSurviveRule(0);
       r.apply(c);
-      verify(c).setNextState(new AliveState());
+      verify(c).setNextState(AliveState.getInstance());
    }
 
    @Test
    public void birthRuleSetsTheNextCellStateInAlive() {
       Rule r = RuleFactory.createBirthRule(0);
       r.apply(c);
-      verify(c).setNextState(new AliveState());
+      verify(c).setNextState(AliveState.getInstance());
    }
 
 
