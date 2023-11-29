@@ -1,7 +1,7 @@
 package rule;
 
 import cell.Cell;
-import cell.DeadState;
+import cell.CellFactory;
 
 public class DeathRule implements Rule {
 
@@ -12,8 +12,8 @@ public class DeathRule implements Rule {
     }
 
     @Override
-    public void apply(Cell c) {
-        c.setNextState(DeadState.getInstance());
+    public Cell apply(Cell c) {
+        return CellFactory.makeDeadCell(c.getBoard(), c.getRow(), c.getColumn());
     }
 
     @Override

@@ -12,69 +12,41 @@ import static org.mockito.Mockito.when;
 public class CellTests {
     @Mock
     Board b;
-    static CellFactory factory;
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        factory = new CellFactory(b);
         when(b.getColumns()).thenReturn(2);
+        when(b.getRows()).thenReturn(2);
     }
 
     @Test
     public void AliveCellIsAlive() {
-        Cell c = factory.makeAliveCell();
+        Cell c = CellFactory.makeAliveCell(b, 0 ,0);
         assertTrue(c.isAlive());
     }
 
     @Test
     public void DeadCellIsNotAlive() {
-        Cell c = factory.makeDeadCell();
+        Cell c = CellFactory.makeDeadCell(b, 0 ,0);
         assertFalse(c.isAlive());
-    }
-
-    @Test
-    public void cellTransition() {
-        Cell c = factory.makeAliveCell();
-        assertTrue(c.isAlive());
-        c.transition();
-        c.setNextState(DeadState.getInstance());
-        c.transition();
-        assertFalse(c.isAlive());
-        c.setNextState(DeadState.getInstance());
-        c.transition();
-        assertFalse(c.isAlive());
-        c.setNextState(AliveState.getInstance());
-        c.transition();
-        assertTrue(c.isAlive());
     }
 
     @Test
     public void aliveNeighborsTest() {
-        Cell c = factory.makeDeadCell();
+        Cell c = CellFactory.makeDeadCell(b, 0, 0);
         when(b.numberOfAliveNeighbors(c)).thenReturn(3);
         assertEquals(3, c.numberOfAliveNeighbors());
     }
 
     @Test
-    public void cellIsInZeroZero() {
-        Cell c = factory.makeAliveCell();
+    public void cellIsInGivenPosition() {
+        Cell c = CellFactory.makeDeadCell(b, 0, 1);
         assertEquals(0, c.getRow());
-        assertEquals(0, c.getColumn());
+        assertEquals(1, c.getColumn());
     }
 
     @Test
-    public void cellAreCreatedIndifferentPlaces() {
-        Cell c = factory.makeAliveCell();
-        assertEquals(0, c.getRow());
-        assertEquals(0, c.getColumn());
-        c = factory.makeDeadCell();
-        assertEquals(0, c.getRow());
-        assertEquals(1, c.getColumn());
-        c = factory.makeDeadCell();
-        assertEquals(1, c.getRow());
-        assertEquals(0, c.getColumn());
-        c = factory.makeAliveCell();
-        assertEquals(1, c.getRow());
-        assertEquals(1, c.getColumn());
+    public void cellsMustBeInsideBoard() {
+        assertThrows(IllegalArgumentException.class, () -> CellFactory.makeAliveCell(b,3,1));
     }
 }

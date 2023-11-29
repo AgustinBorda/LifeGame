@@ -11,7 +11,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import rule.Rule;
 import rule.RuleFactory;
-import ruleapplicator.RuleApplicator;
 import timedelayer.TimeDelayerFactory;
 
 import java.util.ArrayList;
@@ -28,6 +27,7 @@ public class GameTests {
         rules.add(RuleFactory.createSurviveRule(2));
         rules.add(RuleFactory.createSurviveRule(3));
         rules.add(RuleFactory.createBirthRule(3));
+        rules.add(RuleFactory.createDeathRule());
     }
 
     public static Stream<Arguments> stillLifesProvider() {
@@ -62,10 +62,9 @@ public class GameTests {
     @ParameterizedTest
     @MethodSource("stillLifesProvider")
     public void stillLifesTest(String initialState) {
-        Board b = new FiniteBoard(initialState);
-        Board clone = new FiniteBoard(initialState);
-        RuleApplicator applicator = new RuleApplicator(b, rules);
-        Game g = new Game(b, applicator, TimeDelayerFactory.makeNullTimeDelayer());
+        Board b = new FiniteBoard(initialState, rules);
+        Board clone = new FiniteBoard(initialState, rules);
+        Game g = new Game(b, TimeDelayerFactory.makeNullTimeDelayer());
         assertEquals(clone, b);
         g.tick();
         assertEquals(clone, b);
@@ -170,15 +169,14 @@ public class GameTests {
     @ParameterizedTest
     @MethodSource("oscillatorProvider")
     public void oscillatorTest(List<String> states) {
-        Board b = new FiniteBoard(states.get(0));
-        RuleApplicator applicator = new RuleApplicator(b, rules);
-        Game g = new Game(b, applicator,TimeDelayerFactory.makeNullTimeDelayer());
+        Board b = new FiniteBoard(states.get(0), rules);
+        Game g = new Game(b,TimeDelayerFactory.makeNullTimeDelayer());
         for(int i = 1; i< states.size(); i++) {
            g.tick();
-           assertEquals(b, new FiniteBoard(states.get(i)));
+           assertEquals(b, new FiniteBoard(states.get(i), rules));
         }
         g.tick();
-        assertEquals(b, new FiniteBoard(states.get(0)));
+        assertEquals(b, new FiniteBoard(states.get(0), rules));
     }
 
     @Test
@@ -199,11 +197,10 @@ public class GameTests {
                 "               \n" +
                 "   AAA   AAA   \n" +
                 "               ";
-        Board b = BoardFactory.makeBoard("finite", initialState);
-        RuleApplicator applicator = new RuleApplicator(b, rules);
-        Game g = new Game(b, applicator,TimeDelayerFactory.makeNullTimeDelayer());
+        Board b = BoardFactory.makeBoard("finite", initialState, rules);
+        Game g = new Game(b,TimeDelayerFactory.makeNullTimeDelayer());
         g.simulate(3);
-        assertEquals(BoardFactory.makeBoard("finite", initialState), b);
+        assertEquals(BoardFactory.makeBoard("finite", initialState, rules), b);
 
     }
 

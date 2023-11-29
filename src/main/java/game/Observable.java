@@ -1,4 +1,4 @@
-package board;
+package game;
 
 import view.Observer;
 
@@ -16,8 +16,5 @@ public abstract class Observable {
         observers.remove(o);
     }
 
-    public void notifyObservers() {
-        for(Observer o: observers)
-            o.update();
-    }
+    public abstract void notifyObservers();
 }

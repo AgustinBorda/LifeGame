@@ -1,8 +1,7 @@
 package rule;
 
-import cell.AliveState;
+import board.Board;
 import cell.Cell;
-import cell.DeadState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -22,6 +21,9 @@ import static org.mockito.Mockito.when;
 public class RuleTests {
    @Mock
    Cell c;
+
+   @Mock
+   Board b;
 
    @BeforeEach
     public void setUp() {
@@ -88,24 +90,39 @@ public class RuleTests {
    }
 
    @Test
-   public void deathRuleSetsTheNextCellStateInDead() {
+   public void deathRuleSetsTheNextCellInDead() {
       Rule r = RuleFactory.createDeathRule();
-      r.apply(c);
-      verify(c).setNextState(DeadState.getInstance());
+      when(c.getBoard()).thenReturn(b);
+      when(c.getRow()).thenReturn(1);
+      when(c.getColumn()).thenReturn(2);
+      when(b.getRows()).thenReturn(2);
+      when(b.getColumns()).thenReturn(4);
+      Cell cell = r.apply(c);
+      assertFalse(cell.isAlive());
    }
 
    @Test
    public void surviveRuleSetsTheNextCellStateInAlive() {
       Rule r = RuleFactory.createSurviveRule(0);
-      r.apply(c);
-      verify(c).setNextState(AliveState.getInstance());
+      when(c.getBoard()).thenReturn(b);
+      when(c.getRow()).thenReturn(1);
+      when(c.getColumn()).thenReturn(2);
+      when(b.getRows()).thenReturn(2);
+      when(b.getColumns()).thenReturn(4);
+      Cell cell = r.apply(c);
+      assertTrue(cell.isAlive());
    }
 
    @Test
    public void birthRuleSetsTheNextCellStateInAlive() {
       Rule r = RuleFactory.createBirthRule(0);
-      r.apply(c);
-      verify(c).setNextState(AliveState.getInstance());
+      when(c.getBoard()).thenReturn(b);
+      when(c.getRow()).thenReturn(1);
+      when(c.getColumn()).thenReturn(2);
+      when(b.getRows()).thenReturn(2);
+      when(b.getColumns()).thenReturn(4);
+      Cell cell = r.apply(c);
+      assertTrue(cell.isAlive());
    }
 
 

@@ -1,13 +1,14 @@
 package board;
 
 import cell.Cell;
+import rule.Rule;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FiniteBoard extends Board {
-    public FiniteBoard(String initialState) {
-        super(initialState);
+    public FiniteBoard(String initialState, List<Rule> rules) {
+        super(initialState, rules);
     }
 
     @Override

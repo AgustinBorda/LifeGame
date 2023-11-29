@@ -1,13 +1,14 @@
 package board;
 
 import cell.Cell;
+import rule.Rule;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ToroidalBoard extends Board {
-    public ToroidalBoard(String initialState) {
-        super(initialState);
+    public ToroidalBoard(String initialState, List<Rule> rules) {
+        super(initialState, rules);
     }
 
     private int modulo(int a, int b) {

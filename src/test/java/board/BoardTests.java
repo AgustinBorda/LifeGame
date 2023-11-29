@@ -1,27 +1,38 @@
 package board;
 
-import cell.AliveState;
+import cell.AliveCell;
 import cell.Cell;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import rule.Rule;
 
+import java.util.Collections;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
+
 public class BoardTests {
     String originalState;
     Board b;
+    @Mock
+    Rule r;
+
     @BeforeEach
     public void setUp() {
+        MockitoAnnotations.initMocks(this);
         originalState = "    \n" +
                 "  A \n" +
                 "A  A\n" +
                 "AAAA\n" +
                 " A A";
-        b = new FiniteBoard(originalState);
+        b = new FiniteBoard(originalState, Collections.emptyList());
     }
 
     @Test
@@ -45,12 +56,14 @@ public class BoardTests {
         originalState = "    \n" +
                 "    \n" +
                 "    \n";
-        b = new FiniteBoard(originalState);
+        b = new FiniteBoard(originalState, Collections.singletonList(r));
         BoardIterator iterator = b.iterator();
         while(iterator.hasNext()) {
-            iterator.next().setNextState(AliveState.getInstance());
+            Cell c = iterator.next();
+           when(r.canApply(c)).thenReturn(true);
+           when(r.apply(c)).thenReturn(new AliveCell(c.getBoard(), c.getRow(), c.getColumn()));
         }
-        b.transition();
+        b.nextState();
         iterator = b.iterator();
         while(iterator.hasNext())
             assertTrue(iterator.next().isAlive());
@@ -60,7 +73,7 @@ public class BoardTests {
     public void badInitialState() {
         originalState = "  \n" +
                 " \n";
-        assertThrows(IllegalArgumentException.class, () -> b = new FiniteBoard(originalState),
+        assertThrows(IllegalArgumentException.class, () -> b = new FiniteBoard(originalState, Collections.emptyList()),
                 "The board must be rectangular");
     }
 
@@ -124,7 +137,7 @@ public class BoardTests {
     @ParameterizedTest
     @MethodSource("CellLocationAndNeighborsForToroidalBoardProvider")
     public void ToroidalBoardNeighborsTest(int row, int column, int neighbors) {
-        Board b = new ToroidalBoard(originalState);
+        Board b = new ToroidalBoard(originalState, Collections.emptyList());
         Cell c = b.getCell(row,column);
         assertEquals(neighbors, c.numberOfAliveNeighbors());
     }

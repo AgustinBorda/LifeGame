@@ -2,35 +2,26 @@ package cell;
 
 import board.Board;
 
-public class Cell {
+public abstract class Cell {
 
     private Board board;
-    private CellState currentState;
-
-    private CellState nextState;
-
     private final int row;
 
     private final int column;
 
-    public Cell(Board b,CellState c, int i, int j) {
-        currentState = c;
+    public Cell(Board b, int i, int j) {
+        if(i < 0 || i >= b.getRows() || j < 0 || j>= b.getColumns())
+            throw new IllegalArgumentException("Invalid Cell position");
         board = b;
         row = i;
         column = j;
     }
 
-    public void setNextState(CellState s) {
-        nextState = s;
+    public Board getBoard() {
+        return board;
     }
 
-    public void transition() {
-        currentState = nextState;
-    }
-
-    public boolean isAlive() {
-        return currentState.alive();
-    }
+    public abstract boolean isAlive();
 
     public int numberOfAliveNeighbors() {
         return board.numberOfAliveNeighbors(this);
@@ -46,9 +37,7 @@ public class Cell {
     }
 
     @Override
-    public String toString() {
-        return currentState.toString();
-    }
+    public abstract String toString();
 
     @Override
     public boolean equals(Object obj) {

@@ -1,7 +1,7 @@
 package rule;
 
-import cell.AliveState;
 import cell.Cell;
+import cell.CellFactory;
 
 public class BirthRule implements Rule {
 
@@ -17,8 +17,8 @@ public class BirthRule implements Rule {
     }
 
     @Override
-    public void apply(Cell c) {
-        c.setNextState(AliveState.getInstance());
+    public Cell apply(Cell c) {
+        return CellFactory.makeAliveCell(c.getBoard(), c.getRow(),c.getColumn());
     }
 
     @Override

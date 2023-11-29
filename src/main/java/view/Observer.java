@@ -1,7 +1,6 @@
 package view;
 
 public interface Observer {
-    void update();
-
+    void update(String state);
     String display();
 }

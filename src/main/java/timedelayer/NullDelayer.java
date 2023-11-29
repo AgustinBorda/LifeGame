@@ -1,7 +1,17 @@
 package timedelayer;
 
-public class NullDelayer extends TimeDelayer {
+public class NullDelayer implements TimeDelayer {
     public NullDelayer() {
-        behavior = new NullDelayerBehavior();
+
+    }
+
+    @Override
+    public void delay() {
+
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof NullDelayer;
     }
 }

@@ -2,43 +2,27 @@ package view;
 
 import board.Board;
 import board.BoardIterator;
-import board.Observable;
 import cell.Cell;
 import game.Game;
 
 public class ConsoleView implements Observer {
-    Board b;
 
-    public ConsoleView(Board board) {
-        b = board;
-        b.addObserver(this);
-        display();
-    }
+    private String state;
 
     public ConsoleView(Game g) {
-        this(g.getBoard());
+        g.addObserver(this);
+        update(g.getBoard().toString());
     }
 
     @Override
-    public void update() {
+    public void update(String state) {
+        this.state = state;
         print(display());
     }
 
     @Override
     public String display() {
-        StringBuilder res = new StringBuilder();
-        BoardIterator iterator = b.iterator();
-        int i = 0;
-        while(iterator.hasNext()) {
-            Cell c = iterator.next();
-            res.append(printCell(c));
-            i++;
-            if(i >= b.getColumns()) {
-                res.append("\n");
-                i = 0;
-            }
-        }
-        return res.toString();
+        return state.replace("D", " ").replace("A", "■");
     }
 
     private void print(String content) {
@@ -47,10 +31,4 @@ public class ConsoleView implements Observer {
         System.out.println(content);
     }
 
-    private String printCell(Cell c) {
-        if(c.isAlive())
-            return "■";
-        else
-            return " ";
-    }
 }

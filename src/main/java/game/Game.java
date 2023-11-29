@@ -1,18 +1,16 @@
 package game;
 
 import board.Board;
-import ruleapplicator.RuleApplicator;
 import timedelayer.TimeDelayer;
+import view.Observer;
 
-public class Game {
+public class Game extends Observable {
     private Board b;
 
-    private RuleApplicator applicator;
     private TimeDelayer delayer;
 
-    public Game(Board b, RuleApplicator a, TimeDelayer d) {
+    public Game(Board b, TimeDelayer d) {
         this.b = b;
-        applicator = a;
         delayer = d;
     }
 
@@ -21,7 +19,8 @@ public class Game {
     }
 
     public void tick() {
-        applicator.applyRules();
+        b.nextState();
+        notifyObservers();
     }
 
     public void simulate(int steps) {
@@ -29,5 +28,11 @@ public class Game {
             tick();
             delayer.delay();
         }
+    }
+
+    @Override
+    public void notifyObservers() {
+        for(Observer o: observers)
+            o.update(b.toString());
     }
 }

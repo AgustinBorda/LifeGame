@@ -2,20 +2,24 @@ package board;
 
 import cell.Cell;
 import cell.CellFactory;
+import rule.Rule;
 import view.Observer;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Board extends Observable {
+public abstract class Board {
+
     protected Cell[][] board;
+
+    private List<Rule> rules;
 
     private final int rows;
 
     private final int columns;
 
-    public Board(String initialState) {
-        CellFactory factory = new CellFactory(this);
+    public Board(String initialState, List<Rule> rules) {
+        this.rules = rules;
         String[] lines = initialState.split("\n");
         rows = lines.length;
         columns = lines[0].length();
@@ -25,9 +29,9 @@ public abstract class Board extends Observable {
                 throw new IllegalArgumentException("The board must be rectangular");
             for (int j = 0; j< columns; j++) {
                 if(lines[i].charAt(j) == ' ')
-                    board[i][j] = factory.makeDeadCell();
+                    board[i][j] = CellFactory.makeDeadCell(this, i, j);
                 else
-                    board[i][j] = factory.makeAliveCell();
+                    board[i][j] = CellFactory.makeAliveCell(this, i, j);
             }
         }
     }
@@ -53,11 +57,19 @@ public abstract class Board extends Observable {
     }
 
 
-    public void transition() {
-        BoardIterator iterator = iterator();
-        while(iterator.hasNext())
-            iterator.next().transition();
-        notifyObservers();
+    public void nextState() {
+        Cell[][] newBoard = new Cell[rows][columns];
+        BoardIterator boardIterator = iterator();
+        while(boardIterator.hasNext()) {
+            Cell c = boardIterator.next();
+            for(Rule r: rules) {
+                if (r.canApply(c)) {
+                    newBoard[c.getRow()][c.getColumn()] = r.apply(c);
+                    break;
+                }
+            }
+        }
+        board = newBoard;
     }
 
     public BoardIterator iterator() {

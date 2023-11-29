@@ -1,7 +1,7 @@
 package rule;
 
-import cell.AliveState;
 import cell.Cell;
+import cell.CellFactory;
 
 public class SurviveRule implements Rule {
     private int neighbors;
@@ -16,8 +16,8 @@ public class SurviveRule implements Rule {
     }
 
     @Override
-    public void apply(Cell c) {
-        c.setNextState(AliveState.getInstance());
+    public Cell apply(Cell c) {
+        return CellFactory.makeAliveCell(c.getBoard(), c.getRow(),c.getColumn());
     }
 
     @Override

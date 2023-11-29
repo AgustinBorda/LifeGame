@@ -6,5 +6,5 @@ public interface Rule {
 
     public boolean canApply(Cell c);
 
-    public void apply(Cell c);
+    public Cell apply(Cell c);
 }
