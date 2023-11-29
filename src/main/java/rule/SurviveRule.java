@@ -1,17 +1,37 @@
 package rule;
 
-import rule.behavior.RuleBehaviorFactory;
+import cell.AliveState;
+import cell.Cell;
 
-public class SurviveRule extends Rule {
+public class SurviveRule implements Rule {
+    private int neighbors;
+
     public SurviveRule(int neighbors) {
-        behavior = RuleBehaviorFactory.makeSurviveRuleBehavior(neighbors);
+        this.neighbors = neighbors;
     }
 
+    @Override
+    public boolean canApply(Cell c) {
+        return c.isAlive() && c.numberOfAliveNeighbors() == neighbors;
+    }
 
     @Override
-    public boolean equals(Object obj) {
-        if(obj instanceof SurviveRule)
-            return behavior.equals(((SurviveRule) obj).behavior);
-        return false;
+    public void apply(Cell c) {
+        c.setNextState(AliveState.getInstance());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SurviveRule that = (SurviveRule) o;
+
+        return neighbors == that.neighbors;
+    }
+
+    @Override
+    public int hashCode() {
+        return neighbors;
     }
 }
