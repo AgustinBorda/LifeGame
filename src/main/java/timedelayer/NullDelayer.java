@@ -1,17 +1,9 @@
 package timedelayer;
 
-public class NullDelayer implements TimeDelayer {
+import java.util.concurrent.TimeUnit;
+
+public class NullDelayer extends TimeDelayer {
     public NullDelayer() {
-
-    }
-
-    @Override
-    public void delay() {
-
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return obj instanceof NullDelayer;
+        super(TimeUnit.DAYS, 0);
     }
 }

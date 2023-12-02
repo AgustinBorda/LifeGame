@@ -1,9 +1,9 @@
 package game;
 
 import board.BoardFactory;
+import board.BoardType;
 import board.FiniteBoard;
 import board.Board;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -11,7 +11,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import rule.Rule;
 import rule.RuleFactory;
-import timedelayer.TimeDelayerFactory;
+import timedelayer.NullDelayer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -64,7 +64,7 @@ public class GameTests {
     public void stillLifesTest(String initialState) {
         Board b = new FiniteBoard(initialState, rules);
         Board clone = new FiniteBoard(initialState, rules);
-        Game g = new Game(b, TimeDelayerFactory.makeNullTimeDelayer());
+        Game g = new Game(b, new NullDelayer());
         assertEquals(clone, b);
         g.tick();
         assertEquals(clone, b);
@@ -170,7 +170,7 @@ public class GameTests {
     @MethodSource("oscillatorProvider")
     public void oscillatorTest(List<String> states) {
         Board b = new FiniteBoard(states.get(0), rules);
-        Game g = new Game(b,TimeDelayerFactory.makeNullTimeDelayer());
+        Game g = new Game(b,new NullDelayer());
         for(int i = 1; i< states.size(); i++) {
            g.tick();
            assertEquals(b, new FiniteBoard(states.get(i), rules));
@@ -197,10 +197,10 @@ public class GameTests {
                 "               \n" +
                 "   AAA   AAA   \n" +
                 "               ";
-        Board b = BoardFactory.makeBoard("finite", initialState, rules);
-        Game g = new Game(b,TimeDelayerFactory.makeNullTimeDelayer());
+        Board b = BoardFactory.makeBoard(BoardType.FINITE, initialState, rules);
+        Game g = new Game(b,new NullDelayer());
         g.simulate(3);
-        assertEquals(BoardFactory.makeBoard("finite", initialState, rules), b);
+        assertEquals(BoardFactory.makeBoard(BoardType.FINITE, initialState, rules), b);
 
     }
 

@@ -4,14 +4,14 @@ import board.Board;
 import board.BoardIterator;
 import cell.Cell;
 import game.Game;
+import game.Observable;
 
 public class ConsoleView implements Observer {
 
     private String state;
 
-    public ConsoleView(Game g) {
+    public ConsoleView(Observable g) {
         g.addObserver(this);
-        update(g.getBoard().toString());
     }
 
     @Override

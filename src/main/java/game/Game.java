@@ -20,13 +20,14 @@ public class Game extends Observable {
 
     public void tick() {
         b.nextState();
-        notifyObservers();
     }
 
     public void simulate(int steps) {
+        notifyObservers();
         for(int i = 0; i < steps; i++) {
             tick();
             delayer.delay();
+            notifyObservers();
         }
     }
 

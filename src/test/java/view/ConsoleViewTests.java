@@ -6,7 +6,7 @@ import game.Game;
 import org.junit.jupiter.api.Test;
 import rule.Rule;
 import rule.RuleFactory;
-import timedelayer.TimeDelayerFactory;
+import timedelayer.NullDelayer;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,8 +23,9 @@ public class ConsoleViewTests {
     @Test
     public void displayCapturesTheInitialBoardState() {
         b = new FiniteBoard("    \n AA \n A  ", Collections.emptyList());
-        Game g = new Game(b,TimeDelayerFactory.makeNullTimeDelayer());
+        Game g = new Game(b,new NullDelayer());
         ConsoleView view = new ConsoleView(g);
+        g.simulate(0);
         String expected = convertToStringToDisplayFormat(b.toString());
         assertEquals(expected, view.display());
     }
@@ -37,17 +38,18 @@ public class ConsoleViewTests {
         rules.add(RuleFactory.createSurviveRule(2));
         rules.add(RuleFactory.createDeathRule());
         b = new FiniteBoard("    \n AA \n A  ", rules);
-        Game g = new Game(b, TimeDelayerFactory.makeNullTimeDelayer());
+        Game g = new Game(b, new NullDelayer());
         ConsoleView view = new ConsoleView(g);
+        g.simulate(1);
         String expected = convertToStringToDisplayFormat(b.toString());
         assertEquals(expected, view.display());
-        g.tick();
+        g.simulate(1);
         expected = convertToStringToDisplayFormat(b.toString());
         assertEquals(expected, view.display());
-        g.tick();
+        g.simulate(1);
         expected = convertToStringToDisplayFormat(b.toString());
         assertEquals(expected, view.display());
-        g.tick();
+        g.simulate(1);
         expected = convertToStringToDisplayFormat(b.toString());
         assertEquals(expected, view.display());
     }

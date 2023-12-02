@@ -1,29 +1,17 @@
 package configuration;
 
-import board.Board;
-import board.BoardFactory;
-import rule.Rule;
-import rule.RuleFactory;
-import timedelayer.TimeDelayer;
-import timedelayer.TimeDelayerFactory;
-
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-public class GameProperties extends Properties {
-    private static final GameProperties instance = new GameProperties();
+public class GameConfiguration extends Properties {
+    private static final GameConfiguration instance = new GameConfiguration();
 
     boolean loaded = false;
 
     //config
-    public void loadParams() {
-        Parser p = Parser.getInstance();
+    public void loadConfiguratinon() {
+        ArgumentLoader p = ArgumentLoader.getInstance();
         load(p.getConfigPath());
         setProperty("INITIAL_STATE",getProperty("INITIAL_STATE").replaceAll("\\|", ""));
         if(!p.getInitialState().isEmpty())
@@ -51,28 +39,8 @@ public class GameProperties extends Properties {
         }
     }
 
-    public static GameProperties getInstance() {
+    public static GameConfiguration getInstance() {
         return instance;
-    }
-
-    public String getInitialState() {
-        return getProperty("INITIAL_STATE");
-    }
-
-    public String getBoardType() {
-        return getProperty("BOARD_TYPE");
-    }
-
-    public String getTimeBetweenTicks() {
-        return getProperty("TIME_BETWEEN_TICKS");
-    }
-
-    public String getRules() {
-        return getProperty("RULES");
-    }
-
-    public int getSteps() {
-        return Integer.parseInt(getProperty("SIMULATION_STEPS"));
     }
 
 
